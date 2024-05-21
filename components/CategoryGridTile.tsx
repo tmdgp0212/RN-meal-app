@@ -1,34 +1,45 @@
 import React from "react";
-import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  ImageBackground,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
+import { RootStackParamList } from "../types/rootStackParams";
+import { CategoryItemType } from "../types/dummyDataType";
 
-const CategoryGridTile = ({
-  title,
-  color,
-  onPress,
-}: {
-  title: string;
-  color: string;
-  onPress: () => void;
-}) => {
+const CategoryGridTile = ({ item }: { item: CategoryItemType }) => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const onPress = () => {
+    navigation.navigate("MealsOverview", {
+      categoryId: item.id,
+      category: item.title,
+    });
+  };
   return (
-    <View style={styles.gridItem}>
+    <ImageBackground source={{ uri: item.imageUrl }} style={styles.gridItem}>
       <Pressable
         style={({ pressed }) => [
           styles.button,
           {
-            backgroundColor: `${color}dd`,
+            backgroundColor: `${item.color}9e`,
             opacity: Platform.OS === "ios" && pressed ? 0.8 : 1,
           },
         ]}
-        android_ripple={{ color: color }}
+        android_ripple={{ color: `${item.color}ae` }}
         onPress={onPress}
       >
         <View style={styles.innerContainer}>
-          <Text>{title}</Text>
+          <Text style={styles.title}>{item.title}</Text>
         </View>
       </Pressable>
-    </View>
+    </ImageBackground>
   );
 };
 
@@ -58,6 +69,14 @@ const styles = StyleSheet.create({
     padding: 16,
     justifyContent: "center",
     alignItems: "center",
+  },
+  title: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
+    textShadowColor: "black",
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 16,
   },
 });
 

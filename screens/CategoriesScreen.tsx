@@ -7,24 +7,14 @@ import CategoryGridTile from "../components/CategoryGridTile";
 import { CATEGORIES } from "./../data/dummy-data";
 import { RootStackParamList } from "../types/rootStackParams";
 
-type HomeScreenProps = NativeStackScreenProps<RootStackParamList>;
+type ScreenProps = NativeStackScreenProps<RootStackParamList>;
 
-const CategoriesScreen = ({ navigation }: HomeScreenProps) => {
-  const pressTileHandler = () => {
-    navigation.navigate("MealsOverview");
-  };
-
+const CategoriesScreen = ({ navigation }: ScreenProps) => {
   return (
     <View>
       <FlatList
         data={CATEGORIES}
-        renderItem={({ item }) => (
-          <CategoryGridTile
-            title={item.title}
-            color={item.color}
-            onPress={pressTileHandler}
-          />
-        )}
+        renderItem={({ item }) => <CategoryGridTile item={item} />}
         keyExtractor={(item) => item.id}
         numColumns={2}
       />
