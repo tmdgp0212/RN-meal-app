@@ -12,6 +12,7 @@ import { RootStackParamList } from "./types/rootStackParams";
 
 import { FontAwesome } from "@expo/vector-icons";
 import FavoritesScreen from "./screens/FavoritesScreen";
+import { Colors } from "./constants/Colors";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Drawer = createDrawerNavigator<RootStackParamList>();
@@ -20,12 +21,13 @@ const DrawerNavigator = () => {
   return (
     <Drawer.Navigator
       screenOptions={{
-        sceneContainerStyle: { backgroundColor: "#D3D5F5" }, // 배경색
-        headerStyle: { backgroundColor: "#AAAEEB" }, // 헤더스타일
-        drawerContentStyle: { backgroundColor: "#D3D5F5" }, // 드로어 배경색
-        drawerActiveBackgroundColor: "#7A81DE", // 활성 메뉴 배경색
-        drawerActiveTintColor: "#D3D5F5", // 활성 메뉴 글자색
-        drawerInactiveTintColor: "#7A81DE", // 비활성 메뉴 글자색
+        sceneContainerStyle: { backgroundColor: Colors.primary200 }, // 배경색
+        headerTintColor: Colors.primary800,
+        headerStyle: { backgroundColor: Colors.primary400 }, // 헤더스타일
+        drawerContentStyle: { backgroundColor: Colors.primary200 }, // 드로어 배경색
+        drawerActiveBackgroundColor: Colors.primary600, // 활성 메뉴 배경색
+        drawerActiveTintColor: Colors.primary800, // 활성 메뉴 글자색
+        drawerInactiveTintColor: Colors.primary600, // 비활성 메뉴 글자색
       }}
     >
       <Drawer.Screen
@@ -59,8 +61,9 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
-            headerStyle: { backgroundColor: "#AAAEEB" }, // header색
-            contentStyle: { backgroundColor: "#D3D5F5" }, // 배경색
+            headerTintColor: Colors.primary800,
+            headerStyle: { backgroundColor: Colors.primary400 }, // header색
+            contentStyle: { backgroundColor: Colors.primary200 }, // 배경색
           }}
         >
           <Stack.Screen

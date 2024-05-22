@@ -1,4 +1,3 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
 import {
   Image,
@@ -9,10 +8,18 @@ import {
   Text,
   View,
 } from "react-native";
-import { RootStackParamList } from "../types/rootStackParams";
-import { MEALS } from "../data/dummy-data";
-import { MealItemType } from "../types/dummyDataType";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+
 import IconButton from "../components/IconButton";
+
+import { MEALS } from "../data/dummy-data";
+
+import { Colors } from "../constants/Colors";
+
+import { RootStackParamList } from "../types/rootStackParams";
+import { MealItemType } from "../types/dummyDataType";
+
+import { Entypo } from "@expo/vector-icons";
 
 type ScreenProps = NativeStackScreenProps<RootStackParamList, "MealDetail">;
 
@@ -30,34 +37,6 @@ const MealDetailScreen = ({ route, navigation }: ScreenProps) => {
     { label: "Vegetarian", value: meal?.isVegetarian },
   ].filter((tag) => tag.value);
 
-  const descList = [
-    { label: "affordability", value: <Text>{meal?.affordability}</Text> },
-    { label: "complexity", value: <Text>{meal?.complexity}</Text> },
-    { label: "duration", value: <Text>{meal?.duration}m</Text> },
-    {
-      label: "ingredients",
-      value: (
-        <View style={{ flex: 1 }}>
-          {meal?.ingredients.map((ingredient, index) => (
-            <Text key={index}>{ingredient}</Text>
-          ))}
-        </View>
-      ),
-    },
-    {
-      label: "steps",
-      value: (
-        <View style={{ flex: 1, gap: 4 }}>
-          {meal?.steps.map((step, index) => (
-            <Text key={index}>
-              {index + 1}. {step}
-            </Text>
-          ))}
-        </View>
-      ),
-    },
-  ];
-
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const scollOffsetY = event.nativeEvent.contentOffset.y;
     setImageHeight(300 - scollOffsetY / 2);
@@ -66,7 +45,7 @@ const MealDetailScreen = ({ route, navigation }: ScreenProps) => {
   useEffect(() => {
     navigation.setOptions({
       title: meal?.title,
-      headerRight: () => <IconButton />,
+      headerRight: () => <IconButton name="star" color={"#FF7F27"} size={22} />,
     });
   }, []);
   return (
@@ -76,7 +55,7 @@ const MealDetailScreen = ({ route, navigation }: ScreenProps) => {
         style={[styles.image, { height: imageHeight }]}
       />
       <View style={{ flex: 1 }}>
-        <ScrollView onScroll={handleScroll} style={styles.contentContainer}>
+        <ScrollView onScroll={handleScroll}>
           <View style={styles.contentContainer}>
             <View style={styles.badgeContainer}>
               {tags.map((tag) => (
@@ -86,12 +65,29 @@ const MealDetailScreen = ({ route, navigation }: ScreenProps) => {
               ))}
             </View>
             <Text style={styles.title}>{meal?.title}</Text>
-            {descList.map((desc) => (
-              <View style={styles.desc} key={desc.label}>
-                <Text style={styles.label}>{desc.label.toUpperCase()}</Text>
-                {desc.value}
-              </View>
-            ))}
+            <Text>
+              {meal?.affordability}
+              <Entypo name="dot-single" size={16} color="#3e3e3e" />
+              {meal?.complexity}
+              <Entypo name="dot-single" size={16} color="#3e3e3e" />
+              {meal?.duration}m
+            </Text>
+            <Text style={styles.subTitle}>INGREDIENTS</Text>
+            <View style={styles.listContainer}>
+              {meal?.ingredients.map((ingredient, index) => (
+                <Text key={index} style={styles.ingredient}>
+                  {ingredient}
+                </Text>
+              ))}
+            </View>
+            <Text style={styles.subTitle}>STEPS</Text>
+            <View style={styles.listContainer}>
+              {meal?.steps.map((step, index) => (
+                <Text key={index}>
+                  {index + 1}. {step}
+                </Text>
+              ))}
+            </View>
           </View>
         </ScrollView>
       </View>
@@ -100,12 +96,19 @@ const MealDetailScreen = ({ route, navigation }: ScreenProps) => {
 };
 
 const styles = StyleSheet.create({
-  contentContainer: { paddingHorizontal: 8, marginBottom: 16 },
+  contentContainer: {
+    paddingHorizontal: 16,
+    marginBottom: 20,
+  },
   badgeContainer: {
     gap: 8,
     flexDirection: "row",
     alignItems: "center",
     marginVertical: 16,
+  },
+  listContainer: {
+    flex: 1,
+    gap: 8,
   },
   badge: {
     paddingHorizontal: 8,
@@ -127,14 +130,30 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: "bold",
     fontSize: 20,
-    marginBottom: 16,
+    color: Colors.primary900,
+    lineHeight: 36,
+  },
+  subTitle: {
+    width: "100%",
+    marginVertical: 16,
+    padding: 4,
+    color: Colors.primary900,
+    fontWeight: "bold",
+    borderBottomWidth: 2,
+    borderBottomColor: Colors.primary900,
   },
   desc: {
     flexDirection: "row",
     paddingVertical: 8,
     gap: 16,
   },
-  label: { width: 104, fontWeight: "semibold" },
+  label: { width: 102, fontWeight: "semibold", color: Colors.primary900 },
+  ingredient: {
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 6,
+    backgroundColor: Colors.primary400,
+  },
 });
 
 export default MealDetailScreen;
