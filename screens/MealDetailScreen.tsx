@@ -12,6 +12,7 @@ import {
 import { RootStackParamList } from "../types/rootStackParams";
 import { MEALS } from "../data/dummy-data";
 import { MealItemType } from "../types/dummyDataType";
+import IconButton from "../components/IconButton";
 
 type ScreenProps = NativeStackScreenProps<RootStackParamList, "MealDetail">;
 
@@ -63,7 +64,10 @@ const MealDetailScreen = ({ route, navigation }: ScreenProps) => {
   };
 
   useEffect(() => {
-    navigation.setOptions({ title: meal?.title });
+    navigation.setOptions({
+      title: meal?.title,
+      headerRight: () => <IconButton />,
+    });
   }, []);
   return (
     <View style={{ flex: 1 }}>
@@ -96,7 +100,7 @@ const MealDetailScreen = ({ route, navigation }: ScreenProps) => {
 };
 
 const styles = StyleSheet.create({
-  contentContainer: { paddingHorizontal: 8 },
+  contentContainer: { paddingHorizontal: 8, marginBottom: 16 },
   badgeContainer: {
     gap: 8,
     flexDirection: "row",
@@ -105,6 +109,7 @@ const styles = StyleSheet.create({
   },
   badge: {
     paddingHorizontal: 8,
+    paddingVertical: 4,
     borderWidth: 1,
     borderColor: "#006500",
     borderRadius: 8,
