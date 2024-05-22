@@ -13,8 +13,8 @@ export interface MealItemType {
   complexity: string;
   imageUrl: string;
   duration: number;
-  ingredients: string;
-  steps: string;
+  ingredients: string[];
+  steps: string[];
   isGlutenFree: boolean;
   isVegan: boolean;
   isVegetarian: boolean;

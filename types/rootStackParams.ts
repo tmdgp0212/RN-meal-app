@@ -4,4 +4,7 @@ export type RootStackParamList = {
     categoryId: string;
     category: string;
   };
+  MealDetail: {
+    mealId: string;
+  };
 };

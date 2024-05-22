@@ -11,8 +11,18 @@ import {
 import { Entypo } from "@expo/vector-icons";
 
 import { MealItemType } from "../types/dummyDataType";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../types/rootStackParams";
 
 const MealItem = ({ meal }: { meal: MealItemType }) => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const handlePressCard = () => {
+    navigation.navigate("MealDetail", { mealId: meal.id });
+  };
+
   return (
     <Pressable
       style={({ pressed }) =>
@@ -21,6 +31,7 @@ const MealItem = ({ meal }: { meal: MealItemType }) => {
           : styles.cardContainer
       }
       android_ripple={{ color: "#eee" }}
+      onPress={handlePressCard}
     >
       <Image source={{ uri: meal.imageUrl }} style={styles.image} />
       <View style={styles.mealInfoContainer}>
