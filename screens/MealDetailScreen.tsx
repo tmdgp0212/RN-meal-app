@@ -29,8 +29,8 @@ type ScreenProps = NativeStackScreenProps<RootStackParamList, "MealDetail">;
 const MealDetailScreen = ({ route, navigation }: ScreenProps) => {
   const dispatch = useDispatch();
 
-  const favoriteMeals = useSelector<StoreStateType, { ids: string[] }>(
-    (state) => state.FavoriteReducer
+  const favoriteMealIds = useSelector<StoreStateType, string[]>(
+    (state) => state.FavoriteReducer.ids
   );
 
   const meal: MealItemType | undefined = MEALS.find(
@@ -39,7 +39,7 @@ const MealDetailScreen = ({ route, navigation }: ScreenProps) => {
 
   const [imageHeight, setImageHeight] = useState(300);
 
-  const isFavoriteMeal = favoriteMeals.ids.includes(route.params.mealId);
+  const isFavoriteMeal = favoriteMealIds.includes(route.params.mealId);
 
   const tags = [
     { label: "GlutenFree", value: meal?.isGlutenFree },
@@ -54,7 +54,7 @@ const MealDetailScreen = ({ route, navigation }: ScreenProps) => {
   };
 
   const favoriteHandler = () => {
-    if (favoriteMeals.ids.includes(route.params.mealId)) {
+    if (favoriteMealIds.includes(route.params.mealId)) {
       dispatch(removeFavorite({ id: route.params.mealId }));
     } else {
       dispatch(addFavorite({ id: route.params.mealId }));
