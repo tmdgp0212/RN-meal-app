@@ -1,3 +1,4 @@
+import { Provider } from "react-redux";
 import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -7,12 +8,15 @@ import { StatusBar } from "expo-status-bar";
 import CategoriesScreen from "./screens/CategoriesScreen";
 import MealsOverviewScreen from "./screens/MealsOverviewScreen";
 import MealDetailScreen from "./screens/MealDetailScreen";
+import FavoritesScreen from "./screens/FavoritesScreen";
+import { FontAwesome } from "@expo/vector-icons";
 
 import { RootStackParamList } from "./types/rootStackParams";
 
-import { FontAwesome } from "@expo/vector-icons";
-import FavoritesScreen from "./screens/FavoritesScreen";
 import { Colors } from "./constants/Colors";
+import { store } from "./store/store";
+
+import "react-native-gesture-handler";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Drawer = createDrawerNavigator<RootStackParamList>();
@@ -58,28 +62,29 @@ export default function App() {
   return (
     <>
       <StatusBar style="auto" />
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            headerTintColor: Colors.primary800,
-            headerStyle: { backgroundColor: Colors.primary400 }, // header색
-            contentStyle: { backgroundColor: Colors.primary200 }, // 배경색
-          }}
-        >
-          <Stack.Screen
-            name="Drawer"
-            component={DrawerNavigator}
-            options={{ headerShown: false }}
-          />
-          {/* <Stack.Screen name="MealsCategories" component={CategoriesScreen} /> */}
-          <Stack.Screen name="MealsOverview" component={MealsOverviewScreen} />
-          <Stack.Screen name="MealDetail" component={MealDetailScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <Provider store={store}>
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              headerTintColor: Colors.primary800,
+              headerStyle: { backgroundColor: Colors.primary400 }, // header색
+              contentStyle: { backgroundColor: Colors.primary200 }, // 배경색
+            }}
+          >
+            <Stack.Screen
+              name="Drawer"
+              component={DrawerNavigator}
+              options={{ headerShown: false }}
+            />
+            {/* <Stack.Screen name="MealsCategories" component={CategoriesScreen} /> */}
+            <Stack.Screen
+              name="MealsOverview"
+              component={MealsOverviewScreen}
+            />
+            <Stack.Screen name="MealDetail" component={MealDetailScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </Provider>
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {},
-});

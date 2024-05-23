@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Image,
   NativeScrollEvent,
@@ -10,11 +11,13 @@ import {
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import IconButton from "../components/IconButton";
+import IconButton from "../components/favoriteButton";
 
 import { MEALS } from "../data/dummy-data";
 
 import { Colors } from "../constants/Colors";
+import { StoreStateType } from "../store/store";
+import { addFavorite, removeFavorite } from "../store/favorites";
 
 import { RootStackParamList } from "../types/rootStackParams";
 import { MealItemType } from "../types/dummyDataType";
@@ -24,11 +27,19 @@ import { Entypo } from "@expo/vector-icons";
 type ScreenProps = NativeStackScreenProps<RootStackParamList, "MealDetail">;
 
 const MealDetailScreen = ({ route, navigation }: ScreenProps) => {
+  const dispatch = useDispatch();
+
+  const favoriteMeals = useSelector<StoreStateType, { ids: string[] }>(
+    (state) => state.FavoriteReducer
+  );
+
   const meal: MealItemType | undefined = MEALS.find(
     (meal) => meal.id === route.params.mealId
   );
 
   const [imageHeight, setImageHeight] = useState(300);
+
+  const isFavoriteMeal = favoriteMeals.ids.includes(route.params.mealId);
 
   const tags = [
     { label: "GlutenFree", value: meal?.isGlutenFree },
@@ -42,12 +53,23 @@ const MealDetailScreen = ({ route, navigation }: ScreenProps) => {
     setImageHeight(300 - scollOffsetY / 2);
   };
 
+  const favoriteHandler = () => {
+    if (favoriteMeals.ids.includes(route.params.mealId)) {
+      dispatch(removeFavorite({ id: route.params.mealId }));
+    } else {
+      dispatch(addFavorite({ id: route.params.mealId }));
+    }
+  };
+
   useEffect(() => {
     navigation.setOptions({
       title: meal?.title,
-      headerRight: () => <IconButton name="star" color={"#FF7F27"} size={22} />,
+      headerRight: () => (
+        <IconButton isFavorite={isFavoriteMeal} onPress={favoriteHandler} />
+      ),
     });
-  }, []);
+  }, [navigation, favoriteHandler, isFavoriteMeal]);
+
   return (
     <View style={{ flex: 1 }}>
       <Image
